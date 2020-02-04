@@ -96,9 +96,18 @@ func CurrentUserTest(c *gin.Context)  {
 	session := sessions.Default(c)
 	username,ok:= session.Get("username").(string)
 	if !ok{
+		c.JSON(403,gin.H{
+			"code":403,
+			"msg":"请先登入",
+			"data":"",
+		})
 		return
 	}
-	c.String(200,username)
+	c.JSON(200,gin.H{
+		"code":200,
+		"msg":"登入成功",
+		"data":username,
+	})
 }
 
 func GetAllUser(c *gin.Context)  {
