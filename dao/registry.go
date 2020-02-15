@@ -27,13 +27,13 @@ func (d *UserDao)GetUser(username,password string) (ret *model.HomeUser,err erro
 		return
 	}
 	sqlStr :="select * from home_cms.home_user where u_name = ? and u_password=?"
-	fmt.Println(username,password)
 	err = d.MysqlPool.Get(ret,sqlStr,username,password)
 	if err!=nil{
 		fmt.Println(err)
 	}
 	return
 }
+
 //从数据库获取所有用户
 func (d *UserDao)GetAllUser() (ret []model.HomeUser,err error) {
 	ret = make([]model.HomeUser,0)

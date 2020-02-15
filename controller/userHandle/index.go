@@ -9,7 +9,7 @@ func Routers(r *gin.RouterGroup)  {
 	rr :=r.Group("/api/user")
 	rr.POST("/login", service.LoginHandle)
 	rr.POST("/registry", service.RegistryHandle)
-	rr.GET("/current",service.CurrentUserTest)
+	rr.GET("/current",service.CurrentUser)
 	rr.GET("/alluser",service.GetAllUser)
 }
 

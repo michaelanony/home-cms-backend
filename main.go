@@ -15,7 +15,7 @@ func main() {
 		panic(err)
 	}
 	router :=gin.Default()
-	router.Use(middleWare.EnableRedisSession(),cors.New(cors.Config{
+	router.Use(middleWare.EnableCookieSession(),cors.New(cors.Config{
 		AllowOriginFunc:  func(origin string) bool { return true },
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "PATCH"},
 		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type"},

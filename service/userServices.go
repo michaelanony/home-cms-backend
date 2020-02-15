@@ -9,6 +9,7 @@ import (
 	"home-cms/errno"
 	"home-cms/model"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -58,7 +59,6 @@ func LoginHandle(c *gin.Context)  {
 	user :=&model.HomeUser{}
 	user.UName=c.PostForm("u_name")
 	user.UPassword=c.PostForm("u_password")
-	fmt.Println(len(c.Request.PostForm))
 	if len(c.Request.PostForm) == 1{
 		data,_:=ioutil.ReadAll(c.Request.Body)
 		fmt.Println(data)
@@ -83,7 +83,6 @@ func LoginHandle(c *gin.Context)  {
 	session:=sessions.Default(c)
 	session.Set("username",user.UName)
 	session.Save()
-	fmt.Println(user)
 	content := map[string]interface{}{"userInfo":user,"userList":user}
 
 	c.JSON(http.StatusOK,gin.H{
@@ -92,7 +91,19 @@ func LoginHandle(c *gin.Context)  {
 		"data":content,
 	})
 }
-func CurrentUserTest(c *gin.Context)  {
+
+func GetAllUser(c *gin.Context)  {
+	userList, err := dao.GinDao.GetAllUser()
+	if err!=nil{
+		fmt.Println(err)
+	}
+	c.JSON(200,gin.H{
+		"code":200,
+		"data":userList,
+	})
+}
+func CurrentUser(c *gin.Context)  {
+	log.Println(c.Request.Cookies())
 	session := sessions.Default(c)
 	username,ok:= session.Get("username").(string)
 	if !ok{
@@ -107,16 +118,5 @@ func CurrentUserTest(c *gin.Context)  {
 		"code":200,
 		"msg":"登入成功",
 		"data":username,
-	})
-}
-
-func GetAllUser(c *gin.Context)  {
-	userList, err := dao.GinDao.GetAllUser()
-	if err!=nil{
-		fmt.Println(err)
-	}
-	c.JSON(200,gin.H{
-		"code":200,
-		"data":userList,
 	})
 }
