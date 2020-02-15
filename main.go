@@ -22,7 +22,7 @@ func main() {
 		MaxAge:           12 * time.Hour,
 	}))
 	rr := controller.GinRouter(router)
-	if err:=rr.Run(":8080");err!=nil{
+	if err:=rr.Run(":80");err!=nil{
 		panic(err)
 	}
 }
