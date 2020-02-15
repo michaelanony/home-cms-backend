@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"time"
 )
+var cookieDomain ="cms"
 
 func SessionGenerator(username string,c *gin.Context) (err error) {
 	nano := time.Now().UnixNano()
@@ -24,8 +25,8 @@ func SessionGenerator(username string,c *gin.Context) (err error) {
 	//设置cookie
 	//第三个选项为过期时间，单位为秒,第四个为所在目录，第五个为domain
 	//第六个为是否只能通过http是访问，第七个是否允许别人通过js获取自己的cookie
-	c.SetCookie("SESSIONID",sessionId,3600,"/","127.0.0.1",false,false)
-	c.SetCookie("username",username,3600,"/","127.0.0.1",false,false)
+	c.SetCookie("SESSIONID",sessionId,3600,"/",cookieDomain,false,false)
+	c.SetCookie("username",username,3600,"/",cookieDomain,false,false)
 	return
 }
 
