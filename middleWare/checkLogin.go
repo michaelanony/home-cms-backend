@@ -1,23 +1,28 @@
 package middleWare
 
 import (
-	"github.com/gin-contrib/sessions"
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"home-cms/dao"
 )
 
 
 func CheckLoginStatus() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if url :=c.Request.URL.String();url!="/api/user/login"{
-			session := sessions.Default(c)
-			_,ok:= session.Get("username").(string)
-			if !ok{
+			SESSIONID,err := c.Cookie("SESSIONID")
+
+			userNameCookie,err:= c.Cookie("username")
+			userNameRedis,err:=dao.GinDao.CheckSessionIdInRedis(SESSIONID)
+			fmt.Println(userNameCookie,userNameRedis)
+			if err!=nil || userNameCookie!=userNameRedis{
 				c.JSON(403,gin.H{
 					"code":403,
 					"msg":"请先登入",
 					"data":"",
 				})
 				c.Abort()
+				return
 			}
 		}
 		c.Next()

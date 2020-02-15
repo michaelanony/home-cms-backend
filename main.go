@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"home-cms/controller"
 	"home-cms/dao"
-	"home-cms/middleWare"
 	"time"
 )
 
@@ -15,15 +14,15 @@ func main() {
 		panic(err)
 	}
 	router :=gin.Default()
-	router.Use(middleWare.EnableCookieSession(),cors.New(cors.Config{
+	router.Use(cors.New(cors.Config{
 		AllowOriginFunc:  func(origin string) bool { return true },
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "PATCH"},
 		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type"},
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
-	}),middleWare.CheckLoginStatus())
+	}))
 	rr := controller.GinRouter(router)
-	if err:=rr.Run(":80");err!=nil{
+	if err:=rr.Run(":8080");err!=nil{
 		panic(err)
 	}
 }
