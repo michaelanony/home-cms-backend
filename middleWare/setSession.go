@@ -11,7 +11,6 @@ func EnableCookieSession() gin.HandlerFunc {
 	store :=cookie.NewStore([]byte(KEY))
 	store.Options(sessions.Options{
 		HttpOnly: false,
-		Domain:	"127.0.0.1",
 		Secure: false,
 	})
 	return sessions.Sessions("SESSIONID",store)

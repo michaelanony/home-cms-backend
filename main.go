@@ -21,7 +21,7 @@ func main() {
 		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type"},
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
-	}),middleWare.CheckLoginStatus())
+	}))
 	rr := controller.GinRouter(router)
 	if err:=rr.Run(":80");err!=nil{
 		panic(err)
