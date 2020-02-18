@@ -3,11 +3,11 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"home-cms/dao"
 	"home-cms/errno"
 	"home-cms/model"
+	"home-cms/tool"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -80,9 +80,11 @@ func LoginHandle(c *gin.Context)  {
 		})
 		return
 	}
-	session:=sessions.Default(c)
-	session.Set("username",user.UName)
-	session.Save()
+
+	if err =tool.SessionGenerator(user.UName,c);err!=nil{
+		log.Fatal(err)
+	}
+
 	content := map[string]interface{}{"userInfo":user,"userList":user}
 
 	c.JSON(http.StatusOK,gin.H{
@@ -103,10 +105,18 @@ func GetAllUser(c *gin.Context)  {
 	})
 }
 func CurrentUser(c *gin.Context)  {
-	log.Println(c.Request.Cookies())
-	session := sessions.Default(c)
-	username,ok:= session.Get("username").(string)
-	if !ok{
+	sessionId,err:=c.Cookie("SESSIONID")
+	if err!=nil {
+		c.JSON(403,gin.H{
+			"code":403,
+			"msg":"请先登入",
+			"data":"",
+		})
+		log.Println(err)
+		return
+	}
+	username,err:=dao.GinDao.CheckSessionIdInRedis(sessionId)
+	if err!=nil{
 		c.JSON(403,gin.H{
 			"code":403,
 			"msg":"请先登入",
@@ -119,4 +129,19 @@ func CurrentUser(c *gin.Context)  {
 		"msg":"登入成功",
 		"data":username,
 	})
+}
+
+func CookieTest(c *gin.Context)  {
+	//获取客户端是否携带cookie
+	cookie,err:=c.Cookie("key_cookie")
+	//err不为空时说明cookie不存在
+	if err!=nil{
+		fmt.Println(cookie)
+		cookie = "NotSet"
+		//设置cookie
+		//第三个选项为过期时间，单位为秒,第四个为所在目录，第五个为domain
+		//第六个为是否只能通过http是访问，第七个是否允许别人通过js获取自己的cookie
+		c.SetCookie("key_cookie","value_cookie",60,"/","127.0.0.1",false,false)
+	}
+	fmt.Println("cookie值为",cookie)
 }

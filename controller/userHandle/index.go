@@ -11,6 +11,7 @@ func Routers(r *gin.RouterGroup)  {
 	rr.POST("/registry", service.RegistryHandle)
 	rr.GET("/current",service.CurrentUser)
 	rr.GET("/alluser",service.GetAllUser)
+	rr.GET("/cookie",service.CookieTest)
 }
 
 
