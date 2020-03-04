@@ -17,3 +17,7 @@ func GetHomeHosts(c *gin.Context)  {
 		"data":hf,
 	})
 }
+
+func TwrpCheck(c *gin.Context)  {
+	
+}
