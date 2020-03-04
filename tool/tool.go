@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"time"
 )
-var cookieDomain =".cms.home"
+var cookieDomain ="127.0.0.1"
 
 func SessionGenerator(username string,c *gin.Context) (err error) {
 	nano := time.Now().UnixNano()
