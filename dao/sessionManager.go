@@ -14,7 +14,6 @@ func (d *UserDao)InsetSessionIdInRedis(sessionId,username string)(err error){
 }
 func (d *UserDao)CheckSessionIdInRedis(sessionId string)(username string,err error)  {
 	conn := d.RedisPool.Get()
-	log.Println(sessionId)
 	username, err = redis.String(conn.Do("GET", sessionId))
 	if err!=nil{
 		log.Println(err)

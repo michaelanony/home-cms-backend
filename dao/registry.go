@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/garyburd/redigo/redis"
 	"home-cms/model"
+	"log"
 )
 //MYSQL PROCESS
 
@@ -29,8 +30,9 @@ func (d *UserDao)GetUser(username,password string) (ret *model.HomeUser,err erro
 	sqlStr :="select * from home_cms.home_user where u_name = ? and u_password=?"
 	err = d.MysqlPool.Get(ret,sqlStr,username,password)
 	if err!=nil{
-		fmt.Println(err)
+		log.Println(err)
 	}
+
 	return
 }
 

@@ -5,12 +5,19 @@ import (
 	"github.com/gin-gonic/gin"
 	"home-cms/controller"
 	"home-cms/dao"
+	"home-cms/middleWare"
+	"home-cms/utils"
+	"log"
 	"time"
 )
 
 
 func main() {
-	if err:= dao.InitPool("michael:cccbbb@tcp(192.168.11.31:30001)/testDb?parseTime=true","192.168.11.31:30002");err!=nil{
+	config, err := utils.InitEnv()
+	if err !=nil{
+		log.Fatal(err)
+	}
+	if err:= dao.InitPool(config.DevMysqlDb,config.DevRedis);err!=nil{
 		panic(err)
 	}
 	router :=gin.Default()
@@ -20,9 +27,9 @@ func main() {
 		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type"},
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
-	}))
+	}),middleWare.CheckLoginStatus())
 	rr := controller.GinRouter(router)
-	if err:=rr.Run(":8080");err!=nil{
+	if err:=rr.Run(config.Port);err!=nil{
 		panic(err)
 	}
 }

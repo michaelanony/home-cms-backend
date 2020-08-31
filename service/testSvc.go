@@ -8,7 +8,6 @@ import (
 
 func BuyGoods(c *gin.Context)  {
 	goodsName := c.DefaultQuery("name","jack")
-	log.Println(goodsName)
 	goods,err:=dao.GinDao.BuyGoodsInDb(goodsName)
 	if err!=nil{
 		log.Print(err)

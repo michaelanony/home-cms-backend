@@ -5,13 +5,13 @@ import (
 	"home-cms/service"
 )
 
-func Routers(r *gin.RouterGroup)  {
-	rr :=r.Group("/api/user")
+func Routers(r *gin.RouterGroup) {
+	rr := r.Group("/api/user")
 	rr.POST("/login", service.LoginHandle)
 	rr.POST("/registry", service.RegistryHandle)
-	rr.GET("/current",service.CurrentUser)
-	rr.GET("/alluser",service.GetAllUser)
-	rr.GET("/cookie",service.CookieTest)
+	rr.GET("/current", service.CurrentUser)
+	rr.GET("/alluser", service.GetAllUser)
+	rr.GET("/cookie", service.CookieTest)
+	rr.GET("/info", service.UserInfo)
+	rr.POST("/recharge",service.RechargeMoney)
 }
-
-
